@@ -58,36 +58,72 @@ namespace WindowsFormsApp1
       
         private void button2_Click(object sender, EventArgs e)
         {
-            string path = this.textBox1.Text;
-            var book = new LinqToExcel.ExcelQueryFactory(path);
+            string[] paths = this.textBox1.Text.Split(',');
+            int[] numbers = new int[paths.Length];
 
-            book.AddMapping<Person>(x => x.Name, "Name");
-            book.AddMapping<Person>(x => x.Tickets, "# of tickets");
+            //Count the number of tickets in total
 
-            var query = from x in book.Worksheet<Person>()
-                        select x;
+            int ttltickets = 0;
+            int ind = 0;
+            foreach (string path in paths) {
 
-            int ttltickets= 0;
-            foreach(var result in query)
-            {
-                String name = result.Name;
-                ttltickets+=result.Tickets;
+                var book = new LinqToExcel.ExcelQueryFactory(path);
+
+                book.AddMapping<Person>(x => x.Name, "Name");
+                book.AddMapping<Person>(x => x.Tickets, "# of tickets");
+
+                var query1 = from x in book.Worksheet<Person>()
+                            select x;
+
+                foreach (var result in query1)
+                {
+                    String name = result.Name;
+                    ttltickets += result.Tickets;
+                }
+
+                numbers[ind] = ttltickets;
+                ind++;
+
             }
+
 
             Random r = new Random();
             int winner = r.Next(1,ttltickets);
 
-            ttltickets = 0;
+            ind = 0;
+            while(numbers[ind]< winner && ind<= numbers.Length-1)
+            {
+                ind++;
+            }
+
+            string selectedPath = paths[ind];
+            int countFrom = 0;
+            if(ind> 0)
+            {
+                countFrom = numbers[ind - 1];
+            }
+
+            var book1 = new LinqToExcel.ExcelQueryFactory(selectedPath);
+
+            book1.AddMapping<Person>(x => x.Name, "Name");
+            book1.AddMapping<Person>(x => x.Tickets, "# of tickets");
+
+            var query = from x in book1.Worksheet<Person>()
+                        select x;
+            ttltickets = countFrom;
             foreach (var result in query)
             {
                 String name = result.Name;
                 ttltickets += result.Tickets;
-                if (ttltickets >= winner)
+                if(ttltickets >= winner)
                 {
                     Console.WriteLine(name);
                     break;
                 }
             }
+
+            numbers[ind] = ttltickets;
+            ind++;
 
         }
     }
