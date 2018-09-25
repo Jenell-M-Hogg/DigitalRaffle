@@ -8,13 +8,29 @@ namespace WindowsFormsApp1
 {
     class Person
     {
-        public string name;
-        public int tickets;
 
         public Person(string name, int tickets)
         {
-            this.name = name;
-            this.tickets = tickets;
+            this.Name = name;
+            this.Tickets = tickets;
+        }
+
+        public string Name
+        {
+            get;
+            set;
+        }
+
+        public int Tickets
+        {
+            get;
+            set;
+        }
+
+        public Person()
+        {
+            Name = "";
+            Tickets = 0;
         }
     }
 }

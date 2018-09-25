@@ -61,8 +61,8 @@ namespace WindowsFormsApp1
             string path = this.textBox1.Text;
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
-            book.AddMapping<Person>(x => x.name, "Name");
-            book.AddMapping<Person>(x => x.tickets, "# of tickets");
+            book.AddMapping<Person>(x => x.Name, "Name");
+            book.AddMapping<Person>(x => x.Tickets, "# of tickets");
 
             var query = from x in book.Worksheet<Person>()
                         select x;
@@ -70,21 +70,22 @@ namespace WindowsFormsApp1
             int ttltickets= 0;
             foreach(var result in query)
             {
-                String name = result.name;
-                ttltickets+=result.tickets;
+                String name = result.Name;
+                ttltickets+=result.Tickets;
             }
 
             Random r = new Random();
-            int winner = r.Next(ttltickets);
+            int winner = r.Next(1,ttltickets);
 
             ttltickets = 0;
             foreach (var result in query)
             {
-                String name = result.name;
-                ttltickets += result.tickets;
+                String name = result.Name;
+                ttltickets += result.Tickets;
                 if (ttltickets >= winner)
                 {
                     Console.WriteLine(name);
+                    break;
                 }
             }
 
