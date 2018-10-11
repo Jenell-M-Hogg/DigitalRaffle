@@ -118,6 +118,7 @@ namespace WindowsFormsApp1
                 if(ttltickets >= winner)
                 {
                     Console.WriteLine(name);
+                    new Form2(name).Show();
                     break;
                 }
             }
